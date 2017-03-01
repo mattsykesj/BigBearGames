@@ -1,0 +1,43 @@
+﻿@model BigBearGames.Models.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+
+    <h2>Log In</h2>
+
+    @if (ViewBag.NewUser == true)
+    {
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="panel-group panel-success">
+                    <div class="panel panel-heading">Success!</div>
+                    <div class="panel panel-body">Thanks for Registering! Login below with your User Name and Password</div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Html.ValidationSummary()
+
+    @using (@Html.BeginForm())
+    {
+
+
+        @Html.AntiForgeryToken();
+        <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
+
+        <div class="form-group">
+            <label>Name</label>
+            @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @value = ViewBag.Name })
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+        </div>
+
+        <button class="btn btn-primary" type="submit" data-loading-text="Loading...">Log In</button>
+
+    }
+

@@ -1,0 +1,15 @@
+﻿@model BigBearGames.Models.Comment
+
+@{
+    ViewBag.Title = "EditComment";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Key)
+    @Html.TextAreaFor(x => x.Body)
+
+    <button class="btn btn-primary">Edit Comment</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class="btn btn-default"})
+}
+

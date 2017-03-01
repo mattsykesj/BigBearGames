@@ -1,0 +1,33 @@
+﻿@model List<Article>
+@using BigBearGames.Models
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Your Articles
+    </div>
+    <table class="table table-striped">
+
+        @foreach (Article article in Model)
+        {
+            <tr>
+                <td>@article.Title</td>
+                <td>@article.Description</td>
+                <td>
+
+                    @using (Html.BeginForm("Delete", "Blog", new { id = article.Key }))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = article.Key }, new { @class = "btn btn-primary btn-xs" })
+
+                        <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                    }
+
+                </td>   
+            </tr>
+        }
+
+    </table>
+</div>

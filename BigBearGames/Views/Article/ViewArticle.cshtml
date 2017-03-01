@@ -1,0 +1,60 @@
+﻿@model ArticleView
+@using BigBearGames.Models
+@using BigBearGames.Infrastructure;
+
+@{
+    ViewBag.Title = "View Article";
+}
+
+
+<div class="panel panel-default" id="article-panel-view">
+    <div class="panel-heading">
+        @Model.Article.Title 
+    </div>
+    <div class="panel-body">
+        <p>
+            @Html.GetArticleBody(Model.Article.Body)
+        </p>
+    </div>
+    <div class="panel-footer">
+        @Model.Article.ArticleDateTime
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Leave a comment
+        </div>
+        <div class="panel-body">
+            @if (User.Identity.IsAuthenticated)
+            {
+                using (Html.BeginForm("PostComment", "Article"))
+                {
+                    @Html.TextBox("Id", Model.Article.Key, new { @class = "hidden" })
+                    @Html.TextArea("commentBody", new { @class = "form-control" })
+                    <button type="submit" class="btn btn-primary">Post</button>
+                }
+            }
+            else
+            {
+                @: You Must be logged in to post comments!
+            }
+        </div>
+    </div>
+</div>
+
+@foreach (Comment comment in Model.Comments)
+{
+<div class="well comment">
+    <p style="padding-bottom:5px">
+        @comment.Body
+    </p>
+  <div class="panel-footer">
+    <p>
+        Posted at: @comment.CommentDateTime - Posted by: @comment.User.UserName
+    </p>
+  </div>
+</div>
+}
+
+
+
+

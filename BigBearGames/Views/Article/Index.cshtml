@@ -1,0 +1,83 @@
+﻿@model ArticleIndex
+@using BigBearGames.Models
+@using BigBearGames.Infrastructure;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<h2 class="text-center">@Model.ArticleTitle</h2>
+    
+   
+    
+
+    @if (@Model.Articles.Count() == 0)
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                No Articles!
+            </div>
+        </div>
+    }
+    else
+    {
+
+        foreach (Article article in @Model.Articles)
+        {
+            
+                <div class="panel panel-default" id="article-panel">
+                    <div class="panel-heading">
+                        <a id="article-link" href="@Url.Action("ViewArticle", new { @id = article.Key })">
+                            @article.Title - <span class="label @Model.GetArticleString(article.ArticleType)">@article.ArticleType</span>
+                        </a>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-8 text-left pull-left">
+                                @article.Description
+                            </div>
+                            <div class="col-lg-4 pull-right">
+                                <a id="article-link" href="@Url.Action("ViewArticle", new { @id = article.Key })">
+                                    <img src="@article.ImgPath" height="150" width="150" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        @article.ArticleDateTime - @article.User
+                    </div>
+
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            @Html.GetCommentCount(article.Key) - Comments
+                        </div>
+                    </div>
+
+                </div>
+
+        }
+        <div class="text-center">
+            @switch (Model.PagingInfo.ArticleType)
+                {
+                default:
+                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x }))
+                        break;
+
+                case 0:
+                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("News", new { page = x }))
+                        break;
+
+                case 2:
+                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Reviews", new { page = x }))
+                        break;
+
+                case 1:
+                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Blogs", new { page = x }))
+                        break;
+            }
+            
+
+        </div>
+    }
+

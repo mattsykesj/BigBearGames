@@ -1,0 +1,61 @@
+﻿@using BigBearGames.Models
+@model IEnumerable<AppUser>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        User Accounts
+    </div>
+    <div class="form-inline admin-searchbox">
+        @using (Html.BeginForm("Search", "Admin"))
+        {
+            <input type="text" name="searchString" class="form-control" placeholder="Username or Email"/>
+            <button class="btn btn-default" type="submit">Search</button>
+        }
+    </div>
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>@if (ViewBag.Order == "name_asc")
+                {
+                @Html.ActionLink("Name", "OrderName", new { @order = "name_dsc" })
+                }
+                else
+                {
+                @Html.ActionLink("Name", "OrderName", new { @order = "name_asc" })
+                }
+            </th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+        @if(Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center">No User Accounts</td>
+            </tr>
+        }else
+        {
+            foreach (AppUser user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        @using (Html.BeginForm("Delete", "Admin", new {id = user.Id }))
+                        {
+                            @Html.ActionLink("Edit", "Edit", new { id = user.Id}, new { @class="btn btn-primary btn-xs"})
+
+                            <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+@Html.ActionLink("Create", "Create", null, new { @class="btn btn-primary"})
+

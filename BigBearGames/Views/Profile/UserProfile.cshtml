@@ -1,0 +1,43 @@
+﻿@model BigBearGames.Models.ProfileModel    
+@using BigBearGames.Models;
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+<h2>User Profile</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Comments
+    </div>
+    <table class="table table-striped">
+            @if (@Model.Comments.Count() == 0)
+            {
+                <tr>
+                    <th colspan="2" class="text-center">You have no comments!</th>
+                </tr>
+                    }
+                    else
+                    {
+                    foreach(Comment comment in Model.Comments)
+                    {
+                    <tr>
+                    <td>@comment.Body</td>
+                    <td>@comment.CommentDateTime</td>
+                    <td>@comment.Article.Title</td>
+                    <td>
+                        @using (Html.BeginForm("DeleteComment", "Profile", new { id = comment.Key }))
+                        {
+                            @Html.ActionLink("Edit", "EditComment", new { id = comment.Key }, new { @class = "btn btn-primary btn-xs" })
+
+                            <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                        }
+                    </td>
+                    </tr>
+
+                }
+            }
+                
+    </table>   
+</div>
+
