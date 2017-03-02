@@ -51,6 +51,7 @@ namespace BigBearGames.Controllers
                         TotalArticles = context.Articles.Count();
 
                         articles = context.Articles
+                        .Include(x => x.User)
                         .OrderByDescending(x => x.ArticleDateTime)
                         .Skip((page - 1) * PageSize)
                         .Take(PageSize)
@@ -64,6 +65,7 @@ namespace BigBearGames.Controllers
                         TotalArticles = context.Articles.Where(x => x.ArticleType == (ArticleTypeEnum)articleType).Count();
 
                         articles = context.Articles
+                            .Include(x => x.User)
                             .Where(x => x.ArticleType == (ArticleTypeEnum)articleType)
                             .OrderByDescending(x => x.ArticleDateTime)
                             .Skip((page - 1) * PageSize)
@@ -82,6 +84,7 @@ namespace BigBearGames.Controllers
                         .Count();
 
                     articles = context.Articles
+                        .Include(x => x.User)
                         .Where(x => x.Title.Contains(searchString) || x.User.UserName.Contains(searchString))
                         .OrderByDescending(x => x.ArticleDateTime)
                         .Skip((page - 1) * PageSize)

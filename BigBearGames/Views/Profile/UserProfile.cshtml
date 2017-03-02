@@ -4,40 +4,46 @@
     ViewBag.Title = "UserProfile";
 }
 
-<h2>User Profile</h2>
+<h2>User Profile - @Model.Name - @Model.Email</h2>
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        Comments
-    </div>
-    <table class="table table-striped">
+<div class="form-inline" style="padding-bottom:20px">     
+    @Html.ActionLink("Reset Email", "ResetEmail", null, new { @class = "btn btn-danger btn-md" })
+    @Html.ActionLink("Reset Password", "ResetPassword", null, new { @class = "btn btn-danger btn-md" })
+</div>
+
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Your Comments
+        </div>
+        <table class="table table-striped">
             @if (@Model.Comments.Count() == 0)
             {
                 <tr>
                     <th colspan="2" class="text-center">You have no comments!</th>
                 </tr>
-                    }
-                    else
-                    {
-                    foreach(Comment comment in Model.Comments)
-                    {
+            }
+            else
+            {
+                foreach (Comment comment in Model.Comments)
+                {
                     <tr>
-                    <td>@comment.Body</td>
-                    <td>@comment.CommentDateTime</td>
-                    <td>@comment.Article.Title</td>
-                    <td>
-                        @using (Html.BeginForm("DeleteComment", "Profile", new { id = comment.Key }))
-                        {
-                            @Html.ActionLink("Edit", "EditComment", new { id = comment.Key }, new { @class = "btn btn-primary btn-xs" })
+                        <td>@comment.Body</td>
+                        <td>@comment.CommentDateTime</td>
+                        <td>@comment.Article.Title</td>
+                        <td>
+                            @using (Html.BeginForm("DeleteComment", "Profile", new { id = comment.Key }))
+                            {
+                                @Html.ActionLink("Edit", "EditComment", new { id = comment.Key }, new { @class = "btn btn-primary btn-xs" })
 
-                            <button class="btn btn-danger btn-xs" type="submit">Delete</button>
-                        }
-                    </td>
+                                <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                            }
+                        </td>
                     </tr>
 
                 }
             }
-                
-    </table>   
-</div>
+
+        </table>
+    </div>
 

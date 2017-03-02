@@ -1,0 +1,27 @@
+﻿@model ResetEmailModel
+@using BigBearGames.Models
+@{
+    ViewBag.Title = "ResetEmail";
+}
+
+<h2>Reset Email</h2>
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label>New Email</label>
+        @Html.TextBoxFor(x => x.newEmail, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Confirm New Email</label>
+        @Html.TextBoxFor(x => x.confirmNewEmail, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+}
+

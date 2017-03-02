@@ -10,18 +10,18 @@ namespace BigBearGames.Models
     public class CreateModel
     {
         [Required]
-        [Display(Name="User Name")]
+        [Display(Name = "User Name")]
         [RegularExpression("[A-Za-z][A-Za-z0-9._]{4,14}", ErrorMessage = "User Name Invalid")]
         public string Name { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]
-        [RegularExpression(@"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", ErrorMessage ="Email Address Invalid")]
+        [RegularExpression(@"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", ErrorMessage = "Email Address Invalid")]
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]
-        [Compare("Password", ErrorMessage ="Passwords must Match")]
-        [Display(Name="Confirm Password")]
+        [Compare("Password", ErrorMessage = "Passwords must Match")]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -52,7 +52,6 @@ namespace BigBearGames.Models
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public bool isBlogger { get; set; } = false;
         public IEnumerable<Article> Articles { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
     }
@@ -84,7 +83,7 @@ namespace BigBearGames.Models
         public int TotalItems { get; set; }
         public int CurrentPage { get; set; }
         public int? ArticleType { get; set; }
-        public int TotalPages      
+        public int TotalPages
         {
             get
             {
@@ -97,7 +96,7 @@ namespace BigBearGames.Models
     {
         public Article Article { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
-       
+
         public int GetCommentCount(IEnumerable<Comment> comments, int articleKey)
         {
             using (var context = new AppIdentityDbContext())
@@ -107,6 +106,30 @@ namespace BigBearGames.Models
         }
     }
 
+
+    public class ResetEmailModel
+    {
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [RegularExpression(@"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", ErrorMessage = "Email Address Invalid")]
+        public string newEmail { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [RegularExpression(@"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", ErrorMessage = "Email Address Invalid")]
+        [Compare("newEmail", ErrorMessage = "Emails must match")]
+        public string confirmNewEmail { get; set; }
+    }
+
+    public class ResetPasswordModel
+    {
+        [Required]
+        [DataType(DataType.Password)]
+        public string newPassword { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("newPassword")]
+        public string confirmPassword { get; set; }
+    }
 
     
 }

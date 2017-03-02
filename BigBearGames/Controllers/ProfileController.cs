@@ -8,13 +8,15 @@ using Microsoft.AspNet.Identity.Owin;
 using BigBearGames.Models;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity;
 
 
 namespace BigBearGames.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
-        [Authorize]
+        
         public async Task<ActionResult> Index()
         {
             string userName = HttpContext.User.Identity.Name;
@@ -28,13 +30,101 @@ namespace BigBearGames.Controllers
                     userComments = context.Comments.Include(x => x.Article).Where(x => x.User.UserName == user.UserName).ToList();
 
                     var bloggerResult = await UserManager.IsInRoleAsync(user.Id, "Blogger");
-                    ProfileModel model = new ProfileModel { Name = userName, Email = user.Email, Comments = userComments, isBlogger = bloggerResult };
+                    ProfileModel model = new ProfileModel { Name = userName, Email = user.Email, Comments = userComments };
                     return View("UserProfile", model);
                 }
                 
             }
             else
                 return View("Error", new string[] { "User Not Found, try logging in" });
+        }
+
+        [HttpGet]
+        public ActionResult ResetEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ResetEmail(ResetEmailModel model)
+        {
+            
+            AppUser userEmailCheck = UserManager.FindByEmail(model.newEmail); 
+            if(userEmailCheck != null)
+            {
+                ModelState.AddModelError("", "User with that email is already registered");
+                return View();
+            }    
+                
+            var userId = HttpContext.User.Identity.GetUserId();
+
+            if (ModelState.IsValid)
+            {
+                
+                if (userId != null || userId != string.Empty)
+                {
+                    IdentityResult result = UserManager.SetEmail(userId, model.newEmail);
+                    if (result.Succeeded)
+                    {
+                        return View("Success", new string[] { "Email reset" });
+                    }
+                    else
+                    {
+                        AddErrorsFromResult(result);
+                    }
+                }
+                else
+                {
+                   return View("Error", new string[] { "User Not Found" });
+                }                                  
+            }
+          
+         
+            return View();
+         
+        }
+
+        [HttpGet]
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            AppUser user = await UserManager.FindByIdAsync(HttpContext.User.Identity.GetUserId());
+            if (user != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    IdentityResult validPass = await UserManager.PasswordValidator.ValidateAsync(model.newPassword);
+                    if (validPass.Succeeded)
+                    {
+                        user.PasswordHash = UserManager.PasswordHasher.HashPassword(model.newPassword);
+                        IdentityResult result = await UserManager.UpdateAsync(user);
+
+                        if (!result.Succeeded)
+                        {
+                            AddErrorsFromResult(result);
+                        }
+                        else
+                        {
+                            return View("Success", new string[] { "Password reset" });
+                        }
+                    }
+                    else
+                    {
+                        AddErrorsFromResult(validPass);
+                    }
+                }
+            }
+            else
+            {
+                return View("Error", new string[] { "User not found" });
+            }
+
+            return View();
         }
 
         [HttpPost]
@@ -100,6 +190,14 @@ namespace BigBearGames.Controllers
             get
             {
                 return HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
+            }
+        }
+
+        private void AddErrorsFromResult(IdentityResult result)
+        {
+            foreach (string error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
             }
         }
     }
