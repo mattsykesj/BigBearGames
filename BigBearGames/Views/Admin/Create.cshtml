@@ -4,32 +4,35 @@
     ViewBag.Title = "Create User";
 }
 
-<h2>Create User</h2>
 
-@Html.ValidationSummary(false)
+    <h2>Create User</h2>
 
+    @Html.ValidationSummary(false)
 
+    @using (Html.BeginForm())
+    {
 
-@using (Html.BeginForm())
-{
-    <div class="form-group">
-        <label>Name</label>
-        @Html.TextBoxFor(x => x.Name, new { @class="form-control"})
-    </div>
-    <div class="form-group">
-        <label>Email</label>
-        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        <label>Password</label>
-        @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        <label>Confirm Password</label>
-        @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control" })
-    </div>
+        <div class="form-group">
+            <label>Name</label>
+            @Html.TextBoxFor(x => x.Name, new { @class = "form-control", aria_describedby = "name-helper" })
+            <p id="name-helper" class="form-text text-muted">Your User Name must be between 5-14 characters. Only contain letters, numbers, undescores and periods</p>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control", aria_describedby = "password-helper" })
+            <p id="password-helper" class="form-text text-muted">Password must be over 6 characters and contain atleast one number</p>
+        </div>
+        <div class="form-group">
+            <label>Confirm Password</label>
+            @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control" })
+        </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
-    @Html.ActionLink("Cancel", "Index", null, new { @class="btn btn-default"})
-}
+        <button type="submit" class="btn btn-primary">Create</button>
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+
+    }
 

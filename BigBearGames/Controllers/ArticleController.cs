@@ -17,7 +17,7 @@ namespace BigBearGames.Controllers
     {
         public int PageSize = 2;
 
-        public ActionResult Index(int? articleType, int page = 1)
+        public ActionResult Index(int? articleType, string searchString, int page = 1)
         {
             int TotalArticles;
             IEnumerable<Article> articles;
@@ -42,27 +42,47 @@ namespace BigBearGames.Controllers
                     break;
             }
 
-            if (articleType == null)
+            if (searchString == String.Empty || searchString == null)
             {
-                using (var context = new AppIdentityDbContext())
+                if (articleType == null)
                 {
-                    TotalArticles = context.Articles.Count();
+                    using (var context = new AppIdentityDbContext())
+                    {
+                        TotalArticles = context.Articles.Count();
 
-                    articles = context.Articles
-                    .OrderByDescending(x => x.ArticleDateTime)
-                    .Skip((page - 1) * PageSize)
-                    .Take(PageSize)
-                    .ToList();
+                        articles = context.Articles
+                        .OrderByDescending(x => x.ArticleDateTime)
+                        .Skip((page - 1) * PageSize)
+                        .Take(PageSize)
+                        .ToList();
+                    }
+                }
+                else
+                {
+                    using (var context = new AppIdentityDbContext())
+                    {
+                        TotalArticles = context.Articles.Where(x => x.ArticleType == (ArticleTypeEnum)articleType).Count();
+
+                        articles = context.Articles
+                            .Where(x => x.ArticleType == (ArticleTypeEnum)articleType)
+                            .OrderByDescending(x => x.ArticleDateTime)
+                            .Skip((page - 1) * PageSize)
+                            .Take(PageSize)
+                            .ToList();
+                    }
                 }
             }
+
             else
             {
                 using (var context = new AppIdentityDbContext())
                 {
-                    TotalArticles = context.Articles.Where(x => x.ArticleType == (ArticleTypeEnum)articleType).Count();
+                    TotalArticles = context.Articles
+                        .Where(x => x.Title.Contains(searchString) || x.User.UserName.Contains(searchString))
+                        .Count();
 
                     articles = context.Articles
-                        .Where(x => x.ArticleType == (ArticleTypeEnum)articleType)
+                        .Where(x => x.Title.Contains(searchString) || x.User.UserName.Contains(searchString))
                         .OrderByDescending(x => x.ArticleDateTime)
                         .Skip((page - 1) * PageSize)
                         .Take(PageSize)
@@ -133,6 +153,8 @@ namespace BigBearGames.Controllers
      
             return RedirectToAction("ViewArticle", new {id = Id });
         }
+
+     
   
 
         private AppUserManager UserManager
