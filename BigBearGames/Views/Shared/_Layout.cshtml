@@ -53,6 +53,11 @@
                             if(HttpContext.Current.User.IsInRole("Blogger") || HttpContext.Current.User.IsInRole("Administrator"))
                             {
                                 <li><a href="@Url.Action("Index", "Blog")"><span class="glyphicon glyphicon-send"></span> Blog Dashboard</a></li>
+                                if (HttpContext.Current.User.IsInRole("Administrator"))
+                                {
+                                    <li><a href="@Url.Action("Index", "Admin")"><span class="glyphicon glyphicon-th"></span> Admin Users</a></li>
+                                    <li><a href="@Url.Action("Index", "AdminRole")"><span class="glyphicon glyphicon-th-list"></span> Admin Roles</a></li>
+                                }
                             }
                             <li><a href="@Url.Action("Index", "Profile")"><span class="glyphicon glyphicon-user"></span> @HttpContext.Current.User.Identity.Name</a></li>
                             <li><a href="@Url.Action("Logout", "Account", new { @returnUrl = Url.Action(ViewContext.RouteData.Values["action"].ToString(), ViewContext.RouteData.Values["controller"].ToString()) })"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
