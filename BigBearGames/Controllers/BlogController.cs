@@ -53,7 +53,12 @@ namespace BigBearGames.Controllers
             {
                 using (var context = new AppIdentityDbContext())
                 {
-                    var article = context.Articles.Single(x => x.Key == Id);
+                    var commentsToDelete = context.Comments.Include("Article").Where(x => x.Article.Key == Id);
+                    foreach(Comment comment in commentsToDelete)
+                    {
+                        context.Comments.Remove(comment);
+                    }
+                    var article = context.Articles.Include("Comments").Single(x => x.Key == Id);
                     context.Articles.Remove(article);
                     context.SaveChanges();
                 }

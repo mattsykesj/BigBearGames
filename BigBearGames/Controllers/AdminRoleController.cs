@@ -18,7 +18,8 @@ namespace BigBearGames.Controllers
  
         public ActionResult Index()
         {
-            return View(RoleManager.Roles);
+            List<AppRole> Roles = RoleManager.Roles.ToList();
+            return View(Roles);
         }
 
         public ActionResult Create()

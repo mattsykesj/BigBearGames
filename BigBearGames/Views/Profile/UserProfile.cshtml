@@ -30,7 +30,6 @@
                     <tr>
                         <td>@comment.Body</td>
                         <td>@comment.CommentDateTime</td>
-                        <td>@comment.Article.Title</td>
                         <td>
                             @using (Html.BeginForm("DeleteComment", "Profile", new { id = comment.Key }))
                             {
