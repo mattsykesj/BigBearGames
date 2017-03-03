@@ -4,6 +4,6 @@ My first time implementing Microsoft Identity through the OWIN framework, this a
 
 Logins for testing/viewing
 
-User                      Blogger                         Administrator
-UserName: User1           UserName: Blogger               UserName: Admin
-Password: Secret1         Password: Secret1               Password: Secret1          
+All passwords: Secret1
+
+Usernames:User1 , Blogger, Admin
